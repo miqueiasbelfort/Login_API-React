@@ -12,9 +12,6 @@ ___
 * Mongoose
 * JWT
 
--> TEST
-* Jest
-
 -> FRONT-END
 * React JS
 * React Router Dom
