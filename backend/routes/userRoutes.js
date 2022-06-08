@@ -41,12 +41,39 @@ router.post("/register", async (req, res) => {
     try {
         
         const newUser = await user.save()
-        createUserToken(newUser, req, res)
+        await createUserToken(newUser, req, res)
 
     } catch (error) {
         res.status(500).json({menssage: error})
     }
 
+})
+router.post("/login", async (req, res) => {
+    const {email, password} = req.body
+
+    if(!email){
+        res.status((422)).json({message: "O email é obrigatório!"})
+        return
+    } else if (!password){
+        res.status((422)).json({message: "A senha é obrigatória"})
+        return
+    }
+
+    const user = await User.findOne({email: email})
+    if(!user){
+        res.status(422).json({
+            message: "Usuário não existe!"
+        })
+        return
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password)
+    if(!checkPassword){
+        res.status(422).json({message: "Senha invalida!"})
+        return
+    }
+    
+    await createUserToken(user, req, res)
 })
 
 module.exports = router
