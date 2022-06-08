@@ -5,6 +5,9 @@ require("dotenv").config()
 // Models
 const User = require("../models/User")
 
+//helpers
+const createUserToken = require("../helpers/create-user-token")
+
 router.post("/register", async (req, res) => {
     
     const {name, email, password, confirmPassword} = req.body
@@ -38,6 +41,7 @@ router.post("/register", async (req, res) => {
     try {
         
         const newUser = await user.save()
+        createUserToken(newUser, req, res)
 
     } catch (error) {
         res.status(500).json({menssage: error})
