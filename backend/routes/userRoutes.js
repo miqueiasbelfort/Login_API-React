@@ -7,6 +7,9 @@ const User = require("../models/User")
 
 //helpers
 const createUserToken = require("../helpers/create-user-token")
+const getUserByToken = require("../helpers/get-user-by-token")
+const getToken = require("../helpers/get-token")
+
 
 router.post("/register", async (req, res) => {
     
@@ -85,7 +88,53 @@ router.get("/:id", async(req, res) => {
         })
         return
     }
-    res.status(200).json({user})
+    res.status(200).json(user)
+})
+//edit user
+router.patch("/edit", async (req, res) => {
+    
+    const token = getToken(req)
+    const user = getUserByToken(token)
+
+    /*const {email, password, name, confirmPassword} = req.body
+
+    if(!name){
+        return res.status(422).json({message: "O nome é obrigatório."})
+    }
+
+    user.name = name
+
+    if(!email){
+        return res.status(422).json({message: "O E-mail é obrigatório."})
+    }
+    user.email = email
+
+    if(!password){
+        return res.status(422).json({message: "A senha é obrigatório."})
+    } else if (password == confirmPassword && password != null){
+        const salt = await bcrypt.genSalt(12)
+        const passwordHash = await bcrypt.hash(password, salt)
+        user.password = passwordHash
+    }
+
+
+    try {
+        
+        const updateUser = await User.findOneAndUpdate(
+            {_id: user._id},
+            {$set: user},
+            {new: true}
+        )
+        res.status(200).json({message: "Usuário Atualizado.", updateUser})
+
+    } catch (error) {
+        res.status(500).json({message: error})
+        return
+    }*/
+
+    res.json(user)
+
+
 })
 
 module.exports = router
